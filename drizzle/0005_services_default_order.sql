@@ -1,0 +1,1 @@
+ALTER TABLE `services` ADD `defaultSortOrder` int DEFAULT 0 NOT NULL;

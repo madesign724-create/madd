@@ -1,6 +1,6 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { type ReactNode, useMemo, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Brand, PrimaryButton, SecondaryButton } from "@/components/app-ui";
 import { DeleteConfirmationDialog } from "@/components/delete-confirmation-dialog";
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   launcherTitle: { color: Brand.ink, fontSize: 14, fontWeight: "900", writingDirection: "rtl", textAlign: "right" },
   launcherSubtitle: { color: Brand.muted, fontSize: 11, marginTop: 2, writingDirection: "rtl", textAlign: "right" },
   overlay: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.62)" },
-  sheet: { height: "92%", backgroundColor: Brand.card, borderTopLeftRadius: 26, borderTopRightRadius: 26, borderWidth: 1, borderColor: Brand.line, overflow: "hidden" },
+  sheet: { maxHeight: Dimensions.get("window").height * 0.92, backgroundColor: Brand.card, borderTopLeftRadius: 26, borderTopRightRadius: 26, borderWidth: 1, borderColor: Brand.line, overflow: "hidden" },
   sheetTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: Brand.line, paddingHorizontal: 17, paddingVertical: 14 },
   close: { width: 38, height: 38, borderRadius: 19, alignItems: "center", justifyContent: "center", backgroundColor: Brand.paleGreen },
   sheetTitle: { color: Brand.ink, fontSize: 17, fontWeight: "900", writingDirection: "rtl" },

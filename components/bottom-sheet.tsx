@@ -34,7 +34,7 @@ export function BottomSheet({
 
 const styles = StyleSheet.create({
   root: {
-    position: "absolute",
+    position: "fixed" as "absolute",
     top: 0,
     left: 0,
     right: 0,

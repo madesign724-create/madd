@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   orderButtonText: { color: Brand.pine, fontSize: 12, fontWeight: "800", writingDirection: "rtl" },
   modalOverlay: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.62)" },
   modalSheet: { maxHeight: "90%", minHeight: "58%", borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: Brand.card, borderColor: "#665529", borderWidth: 1, overflow: "hidden" },
-  reorderSheet: { maxHeight: Dimensions.get("window").height * 0.84, borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: Brand.card, borderColor: "#665529", borderWidth: 1, overflow: "hidden" },
+  reorderSheet: { Height: Dimensions.get("window").height * 0.84, borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: Brand.card, borderColor: "#665529", borderWidth: 1, overflow: "hidden" },
   modalTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 18, paddingVertical: 15, borderBottomWidth: 1, borderBottomColor: Brand.line },
   closeButton: { width: 38, height: 38, borderRadius: 19, alignItems: "center", justifyContent: "center", backgroundColor: "#211B10", borderWidth: 1, borderColor: "#5B4B29" },
   modalTitle: { color: Brand.ink, fontSize: 18, fontWeight: "800", writingDirection: "rtl", textAlign: "right" },

@@ -2,7 +2,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as ImagePicker from "expo-image-picker";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, Image, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Dimensions, FlatList, Image, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { Brand, EmptyState, PrimaryButton, SecondaryButton } from "@/components/app-ui";
 import { DeleteConfirmationDialog } from "@/components/delete-confirmation-dialog";
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   orderButtonText: { color: Brand.pine, fontSize: 12, fontWeight: "800", writingDirection: "rtl" },
   modalOverlay: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.62)" },
   modalSheet: { maxHeight: "90%", minHeight: "58%", borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: Brand.card, borderColor: "#665529", borderWidth: 1, overflow: "hidden" },
-  reorderSheet: { height: "84%", borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: Brand.card, borderColor: "#665529", borderWidth: 1, overflow: "hidden" },
+  reorderSheet: { maxHeight: Dimensions.get("window").height * 0.84, borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: Brand.card, borderColor: "#665529", borderWidth: 1, overflow: "hidden" },
   modalTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 18, paddingVertical: 15, borderBottomWidth: 1, borderBottomColor: Brand.line },
   closeButton: { width: 38, height: 38, borderRadius: 19, alignItems: "center", justifyContent: "center", backgroundColor: "#211B10", borderWidth: 1, borderColor: "#5B4B29" },
   modalTitle: { color: Brand.ink, fontSize: 18, fontWeight: "800", writingDirection: "rtl", textAlign: "right" },

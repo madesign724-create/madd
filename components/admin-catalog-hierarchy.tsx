@@ -1,6 +1,8 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { type ReactNode, useMemo, useState } from "react";
-import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Dimensions, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+
+import { BottomSheet } from "@/components/bottom-sheet";
 
 import { Brand, PrimaryButton, SecondaryButton } from "@/components/app-ui";
 import { DeleteConfirmationDialog } from "@/components/delete-confirmation-dialog";
@@ -219,9 +221,8 @@ export function AdminCatalogHierarchy() {
       <MaterialIcons name="account-tree" size={22} color="#0C0C0C" />
       <View style={styles.launcherCopy}><Text style={styles.launcherTitle}>هيكل الكتالوج وحافظة المحتوى</Text><Text style={styles.launcherSubtitle}>انسخ أو انقل فرعاً كاملاً ثم ألصقه في مكانه الصحيح</Text></View>
     </Pressable>
-    <Modal visible={visible} animationType="slide" transparent onRequestClose={close}>
-      <View style={styles.overlay}>
-        <View style={styles.sheet}>
+    <BottomSheet visible={visible} onRequestClose={close}>
+  <View style={styles.sheet}>
           <View style={styles.sheetTop}><Pressable accessibilityLabel="إغلاق" onPress={close} style={({ pressed }) => [styles.close, pressed && styles.pressed]}><MaterialIcons name="close" size={21} color={Brand.ink} /></Pressable><Text style={styles.sheetTitle}>هيكل الكتالوج</Text></View>
           <FlatList
             style={styles.treeList}
@@ -247,9 +248,8 @@ export function AdminCatalogHierarchy() {
               {pasteClipboard.error ? <Text style={styles.errorText}>{pasteClipboard.error.message}</Text> : null}
             </>}
           />
-        </View>
-      </View>
-    </Modal>
+            </View>
+</BottomSheet>
     {deleteTarget ? <DeleteConfirmationDialog
       visible
       title={deleteTarget.targetType === "service" ? "حذف الصفحة الرئيسية" : "حذف التقسيمة"}

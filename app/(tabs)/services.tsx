@@ -1,6 +1,6 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
-import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { AppHeader, Brand, EmptyState } from "@/components/app-ui";
 import { ScreenContainer } from "@/components/screen-container";
 import { resolveAssetUrl } from "@/lib/asset-url";
@@ -42,11 +42,14 @@ export default function ServicesScreen() {
   );
 }
 
+const CARD_GAP = 13;
+const CARD_WIDTH = (Dimensions.get("window").width - 20 * 2 - CARD_GAP) / 2;
+
 const styles = StyleSheet.create({
   loader: { flex: 1, alignItems: "center", justifyContent: "center" },
   list: { paddingBottom: 28, paddingTop: 2 },
-  row: { direction: "rtl", justifyContent: "space-between" },
-  card: { height: 210, flex: 0.48, borderRadius: 21, overflow: "hidden", backgroundColor: Brand.card, borderWidth: 1, borderColor: Brand.line, marginBottom: 13, position: "relative" },
+  row: { flexDirection: "row-reverse", justifyContent: "space-between" },
+  card: { width: CARD_WIDTH, height: 210, borderRadius: 21, overflow: "hidden", backgroundColor: Brand.card, borderWidth: 1, borderColor: Brand.line, marginBottom: CARD_GAP, position: "relative" },
   image: { width: "100%", height: "100%", position: "absolute" },
   imageFallback: { ...StyleSheet.absoluteFillObject, backgroundColor: "#211B10", alignItems: "center", justifyContent: "center" },
   imageShade: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(8,8,8,0.46)" },

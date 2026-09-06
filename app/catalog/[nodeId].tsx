@@ -1,6 +1,6 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { AppHeader, Brand, EmptyState } from "@/components/app-ui";
 import { ScreenContainer } from "@/components/screen-container";
 import { resolveAssetUrl } from "@/lib/asset-url";
@@ -63,11 +63,14 @@ export default function CatalogNodeScreen() {
   );
 }
 
+const CARD_GAP = 13;
+const CARD_WIDTH = (Dimensions.get("window").width - 20 * 2 - CARD_GAP) / 2;
+
 const styles = StyleSheet.create({
   loader: { flex: 1, alignItems: "center", justifyContent: "center" },
   list: { paddingBottom: 28, paddingTop: 2 },
   row: { justifyContent: "space-between" },
-  card: { minHeight: 232, flex: 0.48, backgroundColor: Brand.card, borderRadius: 21, borderWidth: 1, borderColor: Brand.line, overflow: "hidden", marginBottom: 13, position: "relative" },
+  card: { width: CARD_WIDTH, minHeight: 232, backgroundColor: Brand.card, borderRadius: 21, borderWidth: 1, borderColor: Brand.line, overflow: "hidden", marginBottom: CARD_GAP, position: "relative" },
   image: { width: "100%", height: "100%", position: "absolute" },
   imageFallback: { ...StyleSheet.absoluteFillObject, backgroundColor: "#211B10", alignItems: "center", justifyContent: "center" },
   shade: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(8,8,8,0.48)" },

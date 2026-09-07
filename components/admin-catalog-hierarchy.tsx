@@ -1,6 +1,6 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { type ReactNode, useMemo, useState } from "react";
-import { ActivityIndicator, Alert, Dimensions, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Dimensions, FlatList, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { BottomSheet } from "@/components/bottom-sheet";
 
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   sheetTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: Brand.line, paddingHorizontal: 17, paddingVertical: 14 },
   close: { width: 38, height: 38, borderRadius: 19, alignItems: "center", justifyContent: "center", backgroundColor: Brand.paleGreen },
   sheetTitle: { color: Brand.ink, fontSize: 17, fontWeight: "900", writingDirection: "rtl" },
-  treeList: { flex: 1 },
+  treeList: { flex: 1, minHeight: 0, ...(Platform.OS === "web" ? { overflowY: "auto" as "scroll" } : {}) },
   content: { padding: 16, paddingBottom: 36 },
   intro: { flexDirection: "row-reverse", alignItems: "flex-start", gap: 10, marginBottom: 12 },
   introCopy: { flex: 1, alignItems: "flex-end" },

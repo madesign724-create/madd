@@ -218,8 +218,8 @@ export function AdminCatalogHierarchy() {
 
   return <View style={styles.launcher}>
     <Pressable accessibilityLabel="عرض هيكل الكتالوج وحافظة النسخ والقص واللصق" onPress={() => setVisible(true)} style={({ pressed }) => [styles.launcherButton, pressed && styles.pressed]}>
-      <MaterialIcons name="account-tree" size={22} color="#0C0C0C" />
       <View style={styles.launcherCopy}><Text style={styles.launcherTitle}>هيكل الكتالوج وحافظة المحتوى</Text><Text style={styles.launcherSubtitle}>انسخ أو انقل فرعاً كاملاً ثم ألصقه في مكانه الصحيح</Text></View>
+<MaterialIcons name="account-tree" size={22} color="#0C0C0C" />
     </Pressable>
     <BottomSheet visible={visible} onRequestClose={close}>
   <View style={styles.sheet}>
@@ -264,7 +264,8 @@ export function AdminCatalogHierarchy() {
 
 const styles = StyleSheet.create({
   launcher: { marginBottom: 12 },
-  launcherButton: { flexDirection: "row-reverse", alignItems: "center", gap: 10, padding: 12, borderRadius: 16, backgroundColor: Brand.paleGreen, borderWidth: 1, borderColor: Brand.line },
+  launcherButton: { flexDirection: "row", alignItems: "center", gap: 10, padding: 12, borderRadius: 16, backgroundColor: Brand.paleGreen, borderWidth: 1, borderColor: Brand.line },
+ Brand.paleGreen, borderWidth: 1, borderColor: Brand.line },
   launcherCopy: { flex: 1, alignItems: "flex-end" },
   launcherTitle: { color: Brand.ink, fontSize: 14, fontWeight: "900", writingDirection: "rtl", textAlign: "right" },
   launcherSubtitle: { color: Brand.muted, fontSize: 11, marginTop: 2, writingDirection: "rtl", textAlign: "right" },

@@ -58,6 +58,11 @@ async function startServer() {
   registerStorageProxy(app);
   registerOAuthRoutes(app);
 
+  // المسار الرئيسي لحل مشكلة Cannot GET / عند فتح الموقع مباشرة
+  app.get("/", (_req, res) => {
+    res.status(200).send("MADD Server is alive and running!");
+  });
+
   app.get("/api/health", (_req, res) => {
     res.json({ ok: true, timestamp: Date.now() });
   });

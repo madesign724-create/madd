@@ -44,8 +44,8 @@ export default function DeleteAccountScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { paddingBottom: 30, direction: "rtl" },
-  card: { backgroundColor: Brand.card, borderColor: "#665529", borderWidth: 1, borderRadius: 22, padding: 18, direction: "rtl" },
+  content: { paddingBottom: 30 },
+  card: { backgroundColor: Brand.card, borderColor: "#665529", borderWidth: 1, borderRadius: 22, padding: 18 },
   title: { color: Brand.ink, fontSize: 20, fontWeight: "900", textAlign: "right", writingDirection: "rtl", alignSelf: "stretch" },
   body: { color: Brand.muted, fontSize: 13, lineHeight: 21, textAlign: "right", writingDirection: "rtl", alignSelf: "stretch", marginTop: 9 },
   label: { color: Brand.ink, fontSize: 12, fontWeight: "800", textAlign: "right", writingDirection: "rtl", alignSelf: "stretch", marginTop: 18, marginBottom: 7 },

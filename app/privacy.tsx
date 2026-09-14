@@ -58,12 +58,12 @@ export default function PrivacyScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { paddingBottom: 32, direction: "rtl" },
+  content: { paddingBottom: 32 },
   hero: { backgroundColor: "#211B10", borderColor: "#665529", borderWidth: 1, borderRadius: 22, padding: 20, marginBottom: 14, alignItems: "flex-end" },
   eyebrow: { color: Brand.pine, fontSize: 11, fontWeight: "900", writingDirection: "rtl", textAlign: "right", alignSelf: "stretch" },
   heroTitle: { color: Brand.ink, fontSize: 24, fontWeight: "900", writingDirection: "rtl", textAlign: "right", alignSelf: "stretch", marginTop: 5 },
   heroText: { color: Brand.muted, fontSize: 12, writingDirection: "rtl", textAlign: "right", alignSelf: "stretch", marginTop: 8 },
-  section: { backgroundColor: Brand.card, borderColor: Brand.line, borderWidth: 1, borderRadius: 18, padding: 16, marginBottom: 10, direction: "rtl" },
+  section: { backgroundColor: Brand.card, borderColor: Brand.line, borderWidth: 1, borderRadius: 18, padding: 16, marginBottom: 10 },
   sectionTitle: { color: Brand.ink, fontSize: 15, fontWeight: "900", writingDirection: "rtl", textAlign: "right", alignSelf: "stretch" },
   sectionBody: { color: Brand.muted, fontSize: 13, lineHeight: 21, writingDirection: "rtl", textAlign: "right", alignSelf: "stretch", marginTop: 8 },
   footer: { color: Brand.muted, fontSize: 11, lineHeight: 18, writingDirection: "rtl", textAlign: "center", marginTop: 10 },

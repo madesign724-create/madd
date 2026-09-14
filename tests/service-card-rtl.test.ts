@@ -15,21 +15,21 @@ describe("بطاقات الخدمات العربية", () => {
   });
 
   it("يحافظ على اتجاه ومحاذاة عربية واضحين في نصوص الواجهة الرئيسية", () => {
-    expect(homeSource).toContain('topBar: { minHeight: 54, direction: "rtl", flexDirection: "row"');
-    expect(homeSource).toContain('heroContent: { flex: 1, alignSelf: "stretch", direction: "rtl"');
+    expect(homeSource).toContain('topBar: { minHeight: 54, flexDirection: "row"');
+    expect(homeSource).toContain('heroContent: { flex: 1, alignSelf: "stretch"');
     expect(homeSource).toContain('heroTitle: { alignSelf: "flex-start", color: Brand.ink');
-    expect(homeSource).toContain('sectionHeading: { direction: "rtl", flexDirection: "row"');
-    expect(homeSource).toContain('serviceCopy: { flex: 1, direction: "rtl", flexDirection: "row"');
-    expect(servicesSource).toContain('cardCopy: { flex: 1, direction: "rtl"');
-    expect(servicesSource).toContain('cardFooter: { direction: "rtl", flexDirection: "row"');
+    expect(homeSource).toContain('sectionHeading: {, flexDirection: "row"');
+    expect(homeSource).toContain('serviceCopy: { flex: 1, flexDirection: "row"');
+    expect(servicesSource).toContain('cardCopy: { flex: 1');
+    expect(servicesSource).toContain('cardFooter: {, flexDirection: "row"');
     expect(servicesSource).toContain('title: { alignSelf: "stretch", color: "#FFF9EA"');
   });
 
   it("يفرض RTL على بطاقة الخدمة وتفرعات مودرن وزر الرجوع", () => {
-    expect(serviceDetailSource).toContain('flatList: { direction: "rtl" }');
-    expect(serviceDetailSource).toContain('hero: { height: 190, marginBottom: 18, borderRadius: 23, overflow: "hidden", position: "relative", direction: "rtl"');
-    expect(serviceDetailSource).toContain('card: { minHeight: 87, direction: "rtl", flexDirection: "row-reverse"');
-    expect(serviceDetailSource).toContain('copy: { flex: 1, alignSelf: "stretch", alignItems: "flex-end", justifyContent: "center", direction: "rtl" }');
-    expect(uiSource).toContain('header: { direction: "rtl", flexDirection: "row-reverse"');
+    expect(serviceDetailSource).toContain('flatList: { }');
+    expect(serviceDetailSource).toContain('hero: { height: 190, marginBottom: 18, borderRadius: 23, overflow: "hidden", position: "relative"');
+    expect(serviceDetailSource).toContain('card: { minHeight: 87, flexDirection: "row-reverse"');
+    expect(serviceDetailSource).toContain('copy: { flex: 1, alignSelf: "stretch", alignItems: "flex-end", justifyContent: "center" }');
+    expect(uiSource).toContain('header: {, flexDirection: "row-reverse"');
   });
 });

@@ -1,4 +1,4 @@
-import "@/global.css";
+import { Platform, Pressable, StyleSheet, Text, View, I18nManager } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -7,7 +7,6 @@ import * as Notifications from "expo-notifications";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import "@/lib/_core/nativewind-pressable";
 import { ThemeProvider } from "@/lib/theme-provider";
 import {
@@ -25,10 +24,21 @@ import { useAuth } from "@/hooks/use-auth";
 import { PhoneSetupDialog } from "@/components/phone-setup-dialog";
 import { Brand } from "@/components/app-ui";
 
+// تفعيل اتجاه اليمين لليسار القياسي
+if (!I18nManager.isRTL) {
+  I18nManager.allowRTL(true);
+  I18nManager.forceRTL(true);
+}
+
+// استدعاء ملف CSS فقط على الويب لمنع مشاكل الهواتف
+if (Platform.OS === "web") {
+  require("@/global.css");
+}
+
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
 type ProjectNotificationKind = "pricing_ready" | "project_completed";
-type ForegroundProjectNotification = { kind: ProjectNotificationKind; projectId: number; title: string; body: string };
+type ForpZEAWYtiB6bJ16NuLbGCc6CZ6jJdKfb63 = { kind: ProjectNotificationKind; projectId: number; title: string; body: string };
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -44,10 +54,10 @@ function NotificationCoordinator() {
   const { isAuthenticated } = useAuth();
   const registerToken = trpc.devices.registerPushToken.useMutation();
   const insets = useSafeAreaInsets();
-  const [foregroundNotification, setForegroundNotification] = useState<ForegroundProjectNotification | null>(null);
+  const [foregroundNotification, setForegroundNotification] = useState<ForpZEAWYtiB6bJ16NuLbGCc6CZ6jJdKfb63 | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated || Platform.OS === "web") return;
+    if (!isAuthenticated || Platform.OS === "web" || Constants.appOwnership === "expo") return;
     let active = true;
     async function registerForProjectUpdates() {
       try {
@@ -112,17 +122,19 @@ function NotificationCoordinator() {
     setForegroundNotification(null);
   };
   const eyebrow = foregroundNotification.kind === "pricing_ready" ? "التسعير جاهز للمراجعة" : "اكتمل مشروعك";
-  return <View pointerEvents="box-none" style={[styles.notificationHost, { top: insets.top + 12 }]}>
-    <View style={styles.notificationBanner} accessibilityLiveRegion="polite">
-      <Text style={styles.notificationEyebrow}>{eyebrow}</Text>
-      <Text style={styles.notificationTitle}>{foregroundNotification.title}</Text>
-      <Text style={styles.notificationBody} numberOfLines={3}>{foregroundNotification.body}</Text>
-      <View style={styles.notificationActions}>
-        <Pressable accessibilityRole="button" accessibilityLabel="إخفاء الإشعار" onPress={() => setForegroundNotification(null)} style={({ pressed }) => [styles.notificationDismiss, pressed && styles.notificationPressed]}><Text style={styles.notificationDismissText}>إخفاء</Text></Pressable>
-        <Pressable accessibilityRole="button" accessibilityLabel="عرض المشروع" onPress={handleOpenProject} style={({ pressed }) => [styles.notificationOpen, pressed && styles.notificationPressed]}><Text style={styles.notificationOpenText}>عرض المشروع</Text></Pressable>
+  return (
+    <View pointerEvents="box-none" style={[styles.notificationHost, { top: insets.top + 12 }]}>
+      <View style={styles.notificationBanner} accessibilityLiveRegion="polite">
+        <Text style={styles.notificationEyebrow}>{eyebrow}</Text>
+        <Text style={styles.notificationTitle}>{foregroundNotification.title}</Text>
+        <Text style={styles.notificationBody} numberOfLines={3}>{foregroundNotification.body}</Text>
+        <View style={styles.notificationActions}>
+          <Pressable accessibilityRole="button" accessibilityLabel="إخفاء الإشعار" onPress={() => setForegroundNotification(null)} style={({ pressed }) => [styles.notificationDismiss, pressed && styles.notificationPressed]}><Text style={styles.notificationDismissText}>إخفاء</Text></Pressable>
+          <Pressable accessibilityRole="button" accessibilityLabel="عرض المشروع" onPress={handleOpenProject} style={({ pressed }) => [styles.notificationOpen, pressed && styles.notificationPressed]}><Text style={styles.notificationOpenText}>عرض المشروع</Text></Pressable>
+        </View>
       </View>
     </View>
-  </View>;
+  );
 }
 
 export const unstable_settings = {
@@ -136,7 +148,6 @@ export default function RootLayout() {
   const [insets, setInsets] = useState<EdgeInsets>(initialInsets);
   const [frame, setFrame] = useState<Rect>(initialFrame);
 
-  // Initialize Manus runtime for cookie injection from parent container
   useEffect(() => {
     initManusRuntime();
   }, []);
@@ -152,18 +163,15 @@ export default function RootLayout() {
     return () => unsubscribe();
   }, [handleSafeAreaUpdate]);
 
-  // Create clients once and reuse them
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
-            // تتولى الطفرات إبطال البيانات المتأثرة؛ لا نعيد تحميل كل بيانات الرحلة عند كل انتقال.
             staleTime: 30 * 1000,
             refetchOnWindowFocus: false,
             refetchOnReconnect: true,
             refetchOnMount: false,
-            // Retry failed requests once
             retry: 1,
           },
         },
@@ -171,28 +179,12 @@ export default function RootLayout() {
   );
   const [trpcClient] = useState(() => createTRPCClient());
 
-  // Ensure minimum 8px padding for top and bottom on mobile
-  const providerInitialMetrics = useMemo(() => {
-    const metrics = initialWindowMetrics ?? { insets: initialInsets, frame: initialFrame };
-    return {
-      ...metrics,
-      insets: {
-        ...metrics.insets,
-        top: Math.max(metrics.insets.top, 16),
-        bottom: Math.max(metrics.insets.bottom, 12),
-      },
-    };
-  }, [initialInsets, initialFrame]);
-
   const content = (
-    <GestureHandlerRootView style={{ flex: 1, direction: "rtl" }}>
+    <GestureHandlerRootView style={styles.rootView}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
           <NotificationCoordinator />
           <PhoneSetupDialog />
-          {/* Default to hiding native headers so raw route segments don't appear (e.g. "(tabs)", "products/[id]"). */}
-          {/* If a screen needs the native header, explicitly enable it and set a human title via Stack.Screen options. */}
-          {/* in order for ios apps tab switching to work properly, use presentation: "fullScreenModal" for login page, whenever you decide to use presentation: "modal*/}
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="auth/callback" />
@@ -213,7 +205,7 @@ export default function RootLayout() {
   if (shouldOverrideSafeArea) {
     return (
       <ThemeProvider>
-        <SafeAreaProvider initialMetrics={providerInitialMetrics}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics ?? undefined}>
           <SafeAreaFrameContext.Provider value={frame}>
             <SafeAreaInsetsContext.Provider value={insets}>
               {content}
@@ -226,12 +218,17 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <SafeAreaProvider initialMetrics={providerInitialMetrics}>{content}</SafeAreaProvider>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics ?? undefined}>
+        {content}
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  rootView: {
+    flex: 1,
+  },
   notificationHost: { position: "absolute", left: 12, right: 12, zIndex: 100, elevation: 100 },
   notificationBanner: { backgroundColor: Brand.card, borderColor: Brand.pine, borderWidth: 1, borderRadius: 18, padding: 15, shadowColor: "#000", shadowOpacity: 0.36, shadowRadius: 14, shadowOffset: { width: 0, height: 7 }, elevation: 12 },
   notificationEyebrow: { color: Brand.pine, fontSize: 11, fontWeight: "900", textAlign: "right", writingDirection: "rtl", marginBottom: 4 },

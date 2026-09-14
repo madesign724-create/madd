@@ -17,20 +17,41 @@ export const Brand = {
   error: "#E07A6A",
 };
 
-export function AppHeader({ title, subtitle, onBack, right }: { title: string; subtitle?: string; onBack?: () => void; right?: ReactNode }) {
+export function AppHeader({
+  title,
+  subtitle,
+  onBack,
+  right,
+}: {
+  title: string;
+  subtitle?: string;
+  onBack?: () => void;
+  right?: ReactNode;
+}) {
   return (
     <View style={styles.header}>
-      <View style={styles.headerSide}>{right}</View>
+      <View style={styles.headerSide}>
+        {right != null && typeof right !== "string" ? right : null}
+        {typeof right === "string" && right.length > 0 ? (
+          <Text style={styles.headerSubtitle}>{right}</Text>
+        ) : null}
+      </View>
       <View style={styles.headerTitleWrap}>
         <Text style={styles.headerTitle}>{title}</Text>
-        {subtitle ? <Text style={styles.headerSubtitle}>{subtitle}</Text> : null}
+        {subtitle && typeof subtitle === "string" && subtitle.trim().length > 0 ? (
+          <Text style={styles.headerSubtitle}>{subtitle}</Text>
+        ) : null}
       </View>
       <View style={styles.headerSide}>
-        {onBack ? (
-          <Pressable accessibilityLabel="رجوع" onPress={onBack} style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
+        {Boolean(onBack) && (
+          <Pressable
+            accessibilityLabel="رجوع"
+            onPress={onBack}
+            style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}
+          >
             <MaterialIcons name="arrow-forward" size={22} color={Brand.ink} />
           </Pressable>
-        ) : null}
+        )}
       </View>
     </View>
   );
@@ -84,7 +105,7 @@ export function StatusPill({ status }: { status: string }) {
 }
 
 const styles = StyleSheet.create({
-  header: { direction: "rtl", flexDirection: "row-reverse", alignItems: "center", minHeight: 58, marginBottom: 16, paddingBottom: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Brand.line },
+  header: { flexDirection: "row-reverse", alignItems: "center", minHeight: 58, marginBottom: 16, paddingBottom: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Brand.line },
   headerSide: { width: 44, alignItems: "center" },
   headerTitleWrap: { flex: 1, alignItems: "center" },
   headerTitle: { color: Brand.ink, fontSize: 19, fontWeight: "800", writingDirection: "rtl", textAlign: "center", letterSpacing: 0.1 },

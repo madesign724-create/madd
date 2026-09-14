@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { AppHeader, Brand, PrimaryButton } from "@/components/app-ui";
 import { ScreenContainer } from "@/components/screen-container";
-import { setSessionToken } from "@/lib/_core/auth";
+import { getSessionToken, setSessionToken } from "@/lib/_core/auth";
 import { consumePendingRoute } from "@/lib/pending-route";
-import { completeSupabaseOAuthCallback } from "@/lib/supabase";
+import { completeSupabaseOAuthCallback, supabase } from "@/lib/supabase";
 
 type CallbackStatus = "processing" | "error";
 
@@ -20,12 +20,35 @@ export default function AuthCallbackScreen() {
 
     async function completeLogin() {
       try {
+        // 1. فحص ما إذا تم حفظ الجلسة مسبقاً عبر openAuthSessionAsync
+        const existingToken = await getSessionToken();
+        const { data: currentSessionData } = await supabase.auth.getSession();
+
+        if (existingToken || currentSessionData?.session) {
+          const pendingRoute = await consumePendingRoute();
+          if (active) router.replace((pendingRoute ?? "/(tabs)") as never);
+          return;
+        }
+
+        // 2. إذا لم تكن محفوظة، استخراج الجلسة من الرابط
         const session = await completeSupabaseOAuthCallback();
-        await setSessionToken(session.access_token);
+        if (session?.access_token) {
+          await setSessionToken(session.access_token);
+        }
+
         const pendingRoute = await consumePendingRoute();
         if (active) router.replace((pendingRoute ?? "/(tabs)") as never);
       } catch (error) {
         if (!active) return;
+
+        // 3. فحص أخير للتأكد من حالة الجلسة قبل إظهار شاشة الخطأ
+        const { data: fallbackAuth } = await supabase.auth.getSession();
+        if (fallbackAuth?.session) {
+          const pendingRoute = await consumePendingRoute();
+          router.replace((pendingRoute ?? "/(tabs)") as never);
+          return;
+        }
+
         setStatus("error");
         setMessage(error instanceof Error ? error.message : "تعذر إكمال تسجيل الدخول. حاول مرة أخرى.");
       }
@@ -36,7 +59,7 @@ export default function AuthCallbackScreen() {
   }, [router]);
 
   return (
-    <ScreenContainer className="px-5">
+    <ScreenContainer>
       <View style={styles.content}>
         <AppHeader title="دخول MADD" subtitle="تأكيد الحساب" onBack={() => router.replace("/auth" as never)} />
         <View style={styles.card}>

@@ -24,13 +24,11 @@ import { useAuth } from "@/hooks/use-auth";
 import { PhoneSetupDialog } from "@/components/phone-setup-dialog";
 import { Brand } from "@/components/app-ui";
 
-// تفعيل اتجاه اليمين لليسار القياسي
-if (!I18nManager.isRTL) {
-  I18nManager.allowRTL(true);
-  I18nManager.forceRTL(true);
-}
+// فرض اتجاه اليمين لليسار دائماً دون شرط
+I18nManager.allowRTL(true);
+I18nManager.forceRTL(true);
 
-// استدعاء ملف CSS فقط على الويب لمنع مشاكل الهواتف
+// استدعاء ملف CSS فقط على الويب
 if (Platform.OS === "web") {
   require("@/global.css");
 }
@@ -228,6 +226,7 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   rootView: {
     flex: 1,
+    direction: "rtl",
   },
   notificationHost: { position: "absolute", left: 12, right: 12, zIndex: 100, elevation: 100 },
   notificationBanner: { backgroundColor: Brand.card, borderColor: Brand.pine, borderWidth: 1, borderRadius: 18, padding: 15, shadowColor: "#000", shadowOpacity: 0.36, shadowRadius: 14, shadowOffset: { width: 0, height: 7 }, elevation: 12 },

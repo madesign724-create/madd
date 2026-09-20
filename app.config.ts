@@ -53,6 +53,7 @@ const config: ExpoConfig = {
     },
   },
   android: {
+    supportsRtl: true,
     adaptiveIcon: {
       backgroundColor: "#0C0C0C",
       foregroundImage: "./assets/images/android-icon-foreground.png",
@@ -130,6 +131,7 @@ const config: ExpoConfig = {
         android: {
           buildArchs: ["armeabi-v7a", "arm64-v8a"],
           minSdkVersion: 24,
+          supportsRtl: true,
         },
       },
     ],

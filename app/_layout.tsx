@@ -4,7 +4,7 @@ import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import "@/lib/_core/nativewind-pressable";
@@ -24,7 +24,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { PhoneSetupDialog } from "@/components/phone-setup-dialog";
 import { Brand } from "@/components/app-ui";
 
-// فرض اتجاه اليمين لليسار دائماً دون شرط
+// فرض اتجاه اليمين لليسار دائماً
 I18nManager.allowRTL(true);
 I18nManager.forceRTL(true);
 
@@ -38,14 +38,18 @@ const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
 type ProjectNotificationKind = "pricing_ready" | "project_completed";
 type ForpZEAWYtiB6bJ16NuLbGCc6CZ6jJdKfb63 = { kind: ProjectNotificationKind; projectId: number; title: string; body: string };
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+// تفعيل معالج الإشعارات فقط خارج بيئة Expo Go لتجنب استثناءات SDK 54
+const isExpoGo = Constants.appOwnership === "expo";
+if (!isExpoGo) {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+}
 
 function NotificationCoordinator() {
   const router = useRouter();
@@ -55,7 +59,7 @@ function NotificationCoordinator() {
   const [foregroundNotification, setForegroundNotification] = useState<ForpZEAWYtiB6bJ16NuLbGCc6CZ6jJdKfb63 | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated || Platform.OS === "web" || Constants.appOwnership === "expo") return;
+    if (!isAuthenticated || Platform.OS === "web" || isExpoGo) return;
     let active = true;
     async function registerForProjectUpdates() {
       try {
@@ -83,7 +87,7 @@ function NotificationCoordinator() {
   }, [isAuthenticated, registerToken]);
 
   useEffect(() => {
-    if (Platform.OS === "web") return;
+    if (Platform.OS === "web" || isExpoGo) return;
     const redirectToProject = (notification: Notifications.Notification) => {
       const url = notification.request.content.data?.url;
       if (typeof url === "string" && /^\/project\/\d+$/.test(url)) router.push(url as never);
@@ -95,7 +99,7 @@ function NotificationCoordinator() {
   }, [router]);
 
   useEffect(() => {
-    if (!isAuthenticated || Platform.OS === "web") {
+    if (!isAuthenticated || Platform.OS === "web" || isExpoGo) {
       setForegroundNotification(null);
       return;
     }

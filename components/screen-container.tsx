@@ -29,18 +29,16 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: Brand.canvas,
-    direction: "rtl",
   },
   safeArea: {
     flex: 1,
     width: "100%",
     backgroundColor: Brand.canvas,
-    direction: "rtl",
   },
   body: {
     flex: 1,
     width: "100%",
     paddingHorizontal: 16,
-    direction: "rtl",
+    alignItems: "stretch", // يضمن تمدد العناصر بعرض الشاشة
   },
 });

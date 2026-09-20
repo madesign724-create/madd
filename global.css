@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    direction: rtl;
+    text-align: right;
+  }
+
+  /* توحيد محاذاة حقول الإدخال ومربعات النصوص على الويب */
+  input,
+  textarea {
+    direction: rtl;
+    text-align: right;
+  }
+
+  /* الحقول المخصصة بالأرقام أو الروابط أو الإيميلات يمكن استثناؤها عند الحاجة */
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"] {
+    direction: ltr;
+    text-align: left;
+  }
+}

@@ -48,9 +48,9 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: env.iosBundleId,
-    "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
   android: {
     adaptiveIcon: {
@@ -87,6 +87,12 @@ const config: ExpoConfig = {
     "expo-asset",
     "expo-document-picker",
     "expo-notifications",
+    [
+      "expo-localization",
+      {
+        supportsRTL: true,
+      },
+    ],
     [
       "expo-image-picker",
       {
@@ -128,11 +134,12 @@ const config: ExpoConfig = {
       },
     ],
   ],
-    experiments: {
+  experiments: {
     typedRoutes: true,
     reactCompiler: true,
   },
   extra: {
+    supportsRTL: true,
     eas: {
       projectId: "489191e4-1f0d-4f58-a9ba-1aaf19fa7f8f",
     },

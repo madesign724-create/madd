@@ -18,19 +18,32 @@ export default function AuthCallbackScreen() {
   useEffect(() => {
     let active = true;
 
+    // مستمع فوري لأي تحديث لحالة المصادقة في الخلفية
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!active) return;
+      if (session?.access_token && (event === "SIGNED_IN" || event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED")) {
+        await setSessionToken(session.access_token);
+        const pendingRoute = await consumePendingRoute();
+        router.replace((pendingRoute ?? "/(tabs)") as never);
+      }
+    });
+
     async function completeLogin() {
       try {
-        // 1. فحص ما إذا تم حفظ الجلسة مسبقاً عبر openAuthSessionAsync
+        // 1. فحص ما إذا تم حفظ الجلسة مسبقاً
         const existingToken = await getSessionToken();
         const { data: currentSessionData } = await supabase.auth.getSession();
 
         if (existingToken || currentSessionData?.session) {
+          if (currentSessionData?.session?.access_token) {
+            await setSessionToken(currentSessionData.session.access_token);
+          }
           const pendingRoute = await consumePendingRoute();
           if (active) router.replace((pendingRoute ?? "/(tabs)") as never);
           return;
         }
 
-        // 2. إذا لم تكن محفوظة، استخراج الجلسة من الرابط
+        // 2. محاولة استخراج الجلسة من الرابط مباشرة
         const session = await completeSupabaseOAuthCallback();
         if (session?.access_token) {
           await setSessionToken(session.access_token);
@@ -41,9 +54,15 @@ export default function AuthCallbackScreen() {
       } catch (error) {
         if (!active) return;
 
-        // 3. فحص أخير للتأكد من حالة الجلسة قبل إظهار شاشة الخطأ
+        // 3. تأخير قصير لحل الـ Race Condition ومنح AsyncStorage فرصة لحفظ الجلسة
+        await new Promise((resolve) => setTimeout(resolve, 650));
+        if (!active) return;
+
         const { data: fallbackAuth } = await supabase.auth.getSession();
         if (fallbackAuth?.session) {
+          if (fallbackAuth.session.access_token) {
+            await setSessionToken(fallbackAuth.session.access_token);
+          }
           const pendingRoute = await consumePendingRoute();
           router.replace((pendingRoute ?? "/(tabs)") as never);
           return;
@@ -55,7 +74,11 @@ export default function AuthCallbackScreen() {
     }
 
     void completeLogin();
-    return () => { active = false; };
+
+    return () => {
+      active = false;
+      authListener.subscription.unsubscribe();
+    };
   }, [router]);
 
   return (
@@ -63,10 +86,16 @@ export default function AuthCallbackScreen() {
       <View style={styles.content}>
         <AppHeader title="دخول MADD" subtitle="تأكيد الحساب" onBack={() => router.replace("/auth" as never)} />
         <View style={styles.card}>
-          <MaterialIcons name={status === "error" ? "error-outline" : "verified-user"} size={37} color={status === "error" ? Brand.error : Brand.pine} />
+          <MaterialIcons
+            name={status === "error" ? "error-outline" : "verified-user"}
+            size={37}
+            color={status === "error" ? Brand.error : Brand.pine}
+          />
           <Text style={styles.title}>{status === "error" ? "تعذر تسجيل الدخول" : "جارٍ تأكيد الدخول"}</Text>
           <Text style={styles.message}>{message}</Text>
-          {status === "error" ? <PrimaryButton label="العودة إلى الدخول" onPress={() => router.replace("/auth" as never)} style={styles.action} /> : null}
+          {status === "error" ? (
+            <PrimaryButton label="العودة إلى الدخول" onPress={() => router.replace("/auth" as never)} style={styles.action} />
+          ) : null}
         </View>
       </View>
     </ScreenContainer>
@@ -75,8 +104,16 @@ export default function AuthCallbackScreen() {
 
 const styles = StyleSheet.create({
   content: { flex: 1, justifyContent: "center" },
-  card: { alignItems: "center", borderWidth: 1, borderColor: "#665529", borderRadius: 25, backgroundColor: Brand.card, paddingHorizontal: 24, paddingVertical: 32 },
-  title: { color: Brand.ink, fontSize: 21, fontWeight: "900", marginTop: 15, textAlign: "center", writingDirection: "rtl" },
-  message: { color: Brand.muted, fontSize: 14, lineHeight: 22, marginTop: 10, textAlign: "center", writingDirection: "rtl" },
+  card: {
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#665529",
+    borderRadius: 25,
+    backgroundColor: Brand.card,
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+  },
+  title: { color: Brand.ink, fontSize: 21, fontWeight: "900", marginTop: 15, textAlign: "center" },
+  message: { color: Brand.muted, fontSize: 14, lineHeight: 22, marginTop: 10, textAlign: "center" },
   action: { alignSelf: "stretch", marginTop: 22 },
 });
